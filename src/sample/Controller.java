@@ -5,12 +5,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Slider;
-import javafx.scene.input.DragEvent;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+
+import java.util.function.UnaryOperator;
 
 public class Controller {
     @FXML
@@ -22,52 +24,81 @@ public class Controller {
     @FXML
     private NumberAxis yAxis;
 
+    @FXML
+    private TextField xMin;
+    private double min;
+    @FXML
+    private TextField xMax;
+    private double max;
+
+
+
     public void initialize(){
+        min = Double.parseDouble(xMin.getCharacters().toString());
+        max = Double.parseDouble(xMax.getCharacters().toString());
+
+        xMin.setTextFormatter(new TextFormatter<>(filter));
+        xMax.setTextFormatter(new TextFormatter<>(filter));
+
+        xMin.setOnAction(actionEvent -> {
+            updateBorders();
+        });
+        xMin.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+            updateBorders();
+        });
+
+        xMax.setOnAction(actionEvent -> {
+            updateBorders();
+        });
+        xMax.focusedProperty().addListener((observableValue, aBoolean, t1) -> {
+            updateBorders();
+        });
+
         graphChart.setAnimated(false);
-        xAxis.setLowerBound(-11);
-        xAxis.setUpperBound(11);
+        xAxis.setLowerBound(min);
+        xAxis.setUpperBound(max);
         graphChart.setCreateSymbols(false);
 
         xAxis.setAutoRanging(false);
         sliderA.valueProperty().addListener(((observableValue, number, t1) -> {
-            System.out.println(observableValue.getValue());
             updateDataset(observableValue.getValue().doubleValue(),graphChart.getData());
-
         }));
 
+    }
+
+    private void updateBorders(){
+        min = Double.parseDouble(xMin.getCharacters().toString());
+        xAxis.setLowerBound(min);
+        updateDataset(sliderA.getValue(),graphChart.getData());
+
+        max = Double.parseDouble(xMax.getCharacters().toString());
+        xAxis.setUpperBound(max);
+        updateDataset(sliderA.getValue(),graphChart.getData());
     }
 
     public void updateDataset(double a, ObservableList<XYChart.Series<Double, Double>> data){
         XYChart.Series<Double,Double> series;
 
         series = new XYChart.Series<>();
-        series.setName("Name ");
+        series.setName("Witch of Agnesi");
         if(data.size() == 0)data.add(series);
         else data.set(0,series);
 
-        for(double i = -11;i <= 11;i += 0.2){
+        double delta = (max - min) / 100;
+
+        for(double i = min;i <= max;i += delta){
             series.getData().add(new XYChart.Data<>(i,8 * (a * a * a) / (i * i + 4 * a * a)));
         }
 
-//        for(int i = 0;i < 90; ++i){
-//            double x = Math.sin(i * Math.PI / 180.0);
-//            double y = Math.cos(i * Math.PI / 180.0);
-//            if(series.getData().size() <= i)series.getData().add(new XYChart.Data<>(x * radius,y * radius));
-//            else series.getData().set(i,new XYChart.Data<>(x * radius,y * radius));
-//        }
     }
 
+    UnaryOperator<TextFormatter.Change> filter = t -> {
+        try{
+            Double.parseDouble(t.getControlNewText());
+        }catch (Exception e){
+            t.setText("");
+        }
+        return t;
+    };
 
-//    public void setupSliderA(){
-//        sliderA.setMin(0);
-//        sliderA.setMax(100);
-//        sliderA.setMax(1.0);
-//        sliderA.setMinorTickCount(2);
-//        sliderA.setMajorTickUnit(5);
-//    }
-
-    @FXML
-    void dragSliderA(DragEvent event) {
-        sliderA.setMin(-10);
-    }
 }
