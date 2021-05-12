@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,23 +17,25 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <left>
-      <BorderPane maxWidth="400.0" minHeight="20.0" minWidth="20.0" prefHeight="200.0" prefWidth="190.0" BorderPane.alignment="CENTER">
-         <bottom>
-            <HBox alignment="CENTER" prefHeight="0.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                   <Button fx:id="saveButton" mnemonicParsing="false" prefWidth="100.0" text="Save" HBox.hgrow="ALWAYS">
-                       <HBox.margin>
-                           <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
-                       </HBox.margin>
-                   </Button>
-               </children>
-            </HBox>
+       <BorderPane maxWidth="400.0" minHeight="20.0" minWidth="20.0" prefHeight="200.0" prefWidth="220.0"
+                   BorderPane.alignment="CENTER">
+           <bottom>
+               <HBox alignment="CENTER" prefHeight="0.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                   <children>
+                       <Button fx:id="saveButton" mnemonicParsing="false" prefWidth="100.0" text="Save"
+                               HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                           </HBox.margin>
+                       </Button>
+                   </children>
+               </HBox>
          </bottom>
          <padding>
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
          </padding>
          <center>
-             <VBox prefHeight="343.0" prefWidth="180.0" BorderPane.alignment="CENTER">
+             <VBox prefHeight="343.0" prefWidth="220.0" BorderPane.alignment="CENTER">
                  <children>
                      <Label alignment="CENTER" prefWidth="1000000.0" text="Options" textAlignment="CENTER">
                          <font>
@@ -51,7 +54,7 @@
                                      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
                                  </padding>
                              </Label>
-                             <Spinner fx:id="spinnerA" editable="true"/>
+                             <Spinner fx:id="spinnerA" editable="true" prefWidth="180.0"/>
                          </children>
                          <VBox.margin>
                              <Insets/>
@@ -67,7 +70,7 @@
                                      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
                                  </padding>
                              </Label>
-                             <Spinner fx:id="spinnerB" editable="true"/>
+                             <Spinner fx:id="spinnerB" editable="true" prefWidth="180.0"/>
                          </children>
                          <VBox.margin>
                              <Insets/>
@@ -76,30 +79,49 @@
                              <Insets bottom="8.0"/>
                          </padding>
                      </FlowPane>
-                  <FlowPane prefHeight="0.0" prefWidth="174.0">
-                     <children>
-                        <Label text="xMin:">
-                           <FlowPane.margin>
-                              <Insets right="8.0" top="8.0" />
-                           </FlowPane.margin>
-                        </Label>
-                        <TextField id="xMin" prefHeight="25.0" prefWidth="40.0" promptText="-11" text="-11" fx:id="xMin">
-                           <FlowPane.margin>
-                              <Insets right="8.0" top="8.0" />
-                           </FlowPane.margin>
-                        </TextField>
-                        <Label text="xMax:">
-                           <FlowPane.margin>
-                              <Insets right="8.0" top="8.0" />
-                           </FlowPane.margin>
-                        </Label>
-                         <TextField id="xMax" prefHeight="25.0" prefWidth="40.0" promptText="11" text="11" fx:id="xMax">
-                             <FlowPane.margin>
-                                 <Insets right="8.0" top="8.0"/>
-                             </FlowPane.margin>
-                         </TextField>
-                     </children>
-                  </FlowPane>
+                     <FlowPane alignment="CENTER" prefHeight="0.0" prefWidth="174.0">
+                         <children>
+                             <Label fx:id="startLabel" alignment="CENTER" text="xMin:">
+                                 <FlowPane.margin>
+                                     <Insets right="8.0" top="8.0"/>
+                                 </FlowPane.margin>
+                             </Label>
+                             <TextField id="xMin" fx:id="start" alignment="CENTER" prefHeight="25.0" prefWidth="40.0"
+                                        promptText="-11" text="-11">
+                                 <FlowPane.margin>
+                                     <Insets right="8.0" top="8.0"/>
+                                 </FlowPane.margin>
+                             </TextField>
+                             <Label fx:id="finishLabel" alignment="CENTER" text="xMax:">
+                                 <FlowPane.margin>
+                                     <Insets right="8.0" top="8.0"/>
+                                 </FlowPane.margin>
+                             </Label>
+                             <TextField id="xMax" fx:id="finish" alignment="CENTER" prefHeight="25.0" prefWidth="40.0"
+                                        promptText="11" text="11">
+                                 <FlowPane.margin>
+                                     <Insets right="8.0" top="8.0"/>
+                                 </FlowPane.margin>
+                             </TextField>
+                         </children>
+                     </FlowPane>
+                     <Label fx:id="description" alignment="CENTER" contentDisplay="CENTER" prefWidth="400.0"
+                            text="Label" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                         <VBox.margin>
+                             <Insets top="30.0"/>
+                         </VBox.margin>
+                     </Label>
+                     <FlowPane>
+                         <children>
+                             <Label text="Density:">
+                                 <padding>
+                                     <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                 </padding>
+                             </Label>
+                             <Slider fx:id="density" blockIncrement="25.0" majorTickUnit="100.0" max="1000.0" min="10.0"
+                                     minorTickCount="50" showTickLabels="true" showTickMarks="true" value="100.0"/>
+                         </children>
+                     </FlowPane>
                  </children>
                  <BorderPane.margin>
                      <Insets/>

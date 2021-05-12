@@ -6,8 +6,11 @@ import javafx.scene.control.SpinnerValueFactory;
 
 public abstract class Graph {
     public String name;
-    public double xMin;
-    public double xMax;
+    protected String startLabel;
+    protected String finishLabel;
+    protected double start;
+    protected double finish;
+    public double samples = 100;
 
     public boolean showA;
     protected double aDef;
@@ -24,7 +27,10 @@ public abstract class Graph {
     protected final Controller controller;
 
     protected void updateDataset(XYChart.Series<Double, Double> series) {
+        samples = controller.density.getValue();
     }
+
+    ;
 
     protected XYChart.Series<Double, Double> seriesFromData(ObservableList<XYChart.Series<Double, Double>> data) {
         XYChart.Series<Double, Double> series;
@@ -52,11 +58,14 @@ public abstract class Graph {
         if (showB)
             controller.spinnerB.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(bStart, bStop, bDef, bStep));
 
-        controller.xAxis.setLowerBound(xMin);
-        controller.xMin.setText(Double.toString(xMin));
-        controller.xAxis.setUpperBound(xMax);
-        controller.xMax.setText(Double.toString(xMax));
+        controller.startLabel.setText(startLabel);
+        controller.finishLabel.setText(finishLabel);
+        controller.start.setText(Double.toString(start));
+        controller.finish.setText(Double.toString(finish));
+        controller.description.setText(description());
     }
+
+    public abstract String description();
 
     @Override
     public String toString() {
