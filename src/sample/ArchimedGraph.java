@@ -13,7 +13,7 @@ public class ArchimedGraph extends Graph {
         aStep = 0.2;
 
         start = 0;
-        finish = Math.PI * 4;
+        finish = 3.14 * 4;
         startLabel = "φMin:";
         finishLabel = "φMax:";
 

@@ -13,7 +13,7 @@ public class AstroidGraph extends Graph {
         aStep = 0.2;
 
         start = 0;
-        finish = Math.PI * 2;
+        finish = 3.14 * 2;
         startLabel = "φMin:";
         finishLabel = "φMax:";
 

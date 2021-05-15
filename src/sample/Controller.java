@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.stage.FileChooser;
+import javafx.util.StringConverter;
 import org.gillius.jfxutils.chart.ChartPanManager;
 import org.gillius.jfxutils.chart.JFXChartUtil;
 
@@ -55,8 +56,10 @@ public class Controller {
     public Slider density;
 
     public void initialize() {
-        spinnerA.getEditor().setTextFormatter(new TextFormatter<>(filter));
-        spinnerB.getEditor().setTextFormatter(new TextFormatter<>(filter));
+        spinnerA.getEditor().setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
+        spinnerB.getEditor().setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
+        start.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
+        finish.setTextFormatter(new TextFormatter<>(converter, 0.0, filter));
 
         ObservableList<Graph> list = FXCollections.observableList(List.of(
                 new AstroidGraph(this),
@@ -85,8 +88,6 @@ public class Controller {
         JFXChartUtil.addDoublePrimaryClickAutoRangeHandler(graphChart);
         comboBoxGraph.valueProperty().set(list.get(0));
 
-        start.setTextFormatter(new TextFormatter<>(filter));
-        finish.setTextFormatter(new TextFormatter<>(filter));
 
         start.setOnAction(actionEvent -> updateData());
         start.focusedProperty().addListener((observableValue, aBoolean, t1) -> updateData());
@@ -97,15 +98,16 @@ public class Controller {
         graphChart.setAnimated(false);
         graphChart.setCreateSymbols(false);
 
-        spinnerA.valueProperty().addListener(((observableValue, number, t1) -> updateData()));
+        spinnerA.valueProperty().addListener(((observableValue, number, t1) -> {
+            updateData();
+        }));
         spinnerB.valueProperty().addListener(((observableValue, number, t1) -> updateData()));
         density.valueProperty().addListener((observableValue, number, t1) -> updateData());
+
 
         saveButton.setOnAction(actionEvent -> saveAsPng(graphChart));
 
         updateData();
-        setAutoRanging(true);
-
     }
 
     private void setAutoRanging(boolean range) {
@@ -116,6 +118,7 @@ public class Controller {
     private void updateData() {
         description.setText(comboBoxGraph.getValue().description());
         updateDataset.accept(seriesFromData.apply(graphChart.getData()));
+        setAutoRanging(true);
     }
 
     public Consumer<XYChart.Series<Double, Double>> updateDataset;
@@ -129,6 +132,18 @@ public class Controller {
             t.setText("");
         }
         return t;
+    };
+
+    StringConverter<Double> converter = new StringConverter<>() {
+        @Override
+        public String toString(Double aDouble) {
+            return aDouble.toString();
+        }
+
+        @Override
+        public Double fromString(String s) {
+            return parseDouble(s);
+        }
     };
 
     public static double parseDouble(String t) {
